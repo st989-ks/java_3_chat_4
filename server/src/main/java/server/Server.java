@@ -9,7 +9,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Server {
     private List<ClientHandler> clients;
     private AuthService authService;
-
     public Server() {
         clients = new CopyOnWriteArrayList<>();
 //        authService = new SimpleAuthService();

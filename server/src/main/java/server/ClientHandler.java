@@ -5,12 +5,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
     DataInputStream in;
     DataOutputStream out;
     Server server;
     Socket socket;
+    ExecutorService pool = Executors.newCachedThreadPool();
 
     private String nickname;
     private String login;
@@ -23,7 +26,7 @@ public class ClientHandler {
             out = new DataOutputStream(socket.getOutputStream());
             System.out.println("Client connected " + socket.getRemoteSocketAddress());
 
-            new Thread(() -> {
+            pool.execute(() -> {
                 try {
                     socket.setSoTimeout(120000);
 
@@ -129,7 +132,8 @@ public class ClientHandler {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
+            pool.shutdown();
 
         } catch (IOException e) {
             e.printStackTrace();
